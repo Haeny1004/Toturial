@@ -13,7 +13,8 @@ public class Main {
 		manager.addConverter(DirNodeTree.class, String.class, new DirTreeStringConverter());
 //		manager.addConverter(DirNodeTree.class, File.class, new DirTreeFileConverter("C:/fileStructure.txt"));
 		manager.addConverter(DirNodeTree.class, File.class, new DirTreeFileGenerator());
-		manager.addConverter(File.class, DirNodeTree.class, new FileDirTreeConverter());
+//		manager.addConverter(File.class, DirNodeTree.class, new FileDirTreeConverter());
+		manager.addConverter(File.class, DirNodeTree.class, new FileDirTreeConverter2());
 		
 //		String result = manager.requestConvert(dirTree, String.class);
 //		System.out.println(result);
@@ -23,7 +24,7 @@ public class Main {
 		
 //		manager.requestConvert(dirTree, File.class);
 		
-		DirNodeTree dirTree = manager.requestConvert(new File("C:/JEONG/file-structure.txt"), DirNodeTree.class);
+		DirNodeTree dirTree = manager.requestConvert(new File("C:/filestructure.txt"), DirNodeTree.class);
 		System.out.println(manager.requestConvert(dirTree, String.class));
 		
 		

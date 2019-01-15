@@ -43,6 +43,7 @@ public class DirNode {
 		if(childDS == null) {
 			throw new IllegalArgumentException();
 		}
+		childDS.setParentNode(this);
 		return this.childDir.add(childDS);
 	}
 	
