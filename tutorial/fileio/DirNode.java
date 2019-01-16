@@ -54,6 +54,14 @@ public class DirNode {
 		return this.childDir.addAll(children);
 	}
 	
+	public DirNode getAncestor(int count) {
+		DirNode ancestorNode = this;
+		for (int i = 0; i < count; i++) {
+			ancestorNode = ancestorNode.getParentNode();
+		}
+		return ancestorNode;
+	}
+
 	/* 
 	 * 조회기능을 위한 방법
 	 * 1. 복사

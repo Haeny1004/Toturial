@@ -3,6 +3,7 @@ package com.tutorial.fileio;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tutorial.fileio.converter.GenericConverter;
 import com.tutorial.fileio.exception.NoSuchConverterException;
 
 public class ConverterManager {
