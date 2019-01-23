@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.socket.ReafFile;
+import com.socket.exception.HostConnectException;
+import com.socket.exception.StreamGetterException;
 
 public class ClientMain {
 
@@ -17,12 +19,12 @@ public class ClientMain {
 				OutputStream out = clientSocket.getOutputStream();
 				InputStream in = clientSocket.getInputStream()){
 			
-			ArrayList<ReafFile> reafFileList = new ReafFileFinder("C:/targetDir").getReafFileList();
-			new ReafInfoSender().sendReadInfo(reafFileList, out, in);
+			List<ReafFile> reafFileList = new ReafFileCollector("C:/JEONG/targetDir").getReafFileList();
+			new ReafInfoSender().sendReafInfo(reafFileList, out, in);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			throw new HostConnectException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new StreamGetterException(e);
 		}
 	}
 }
