@@ -13,6 +13,8 @@ public class UsePoolMain {
 	private static List<Integer> randomNumbers = new ArrayList<>();
 
 	public static void main(String[] args) throws InterruptedException {
+		
+		long startTime = System.nanoTime();
 
 		for (int i = 0; i < 100; i++) {
 			CountDownLatch latch = new CountDownLatch(1);
@@ -28,6 +30,7 @@ public class UsePoolMain {
 		}
 		
 		executor.shutdown();
+		System.out.println("Elapsed Time = " + (System.nanoTime() - startTime) / 1000_000 + "ms");
 	}
 
 }

@@ -9,23 +9,26 @@ public class NoPoolMain {
 	private static List<Integer> randomNumbers = new ArrayList<>();
 	
 	public static void main(String[] args) {
-
-		RandomNumberToken rrn = new RandomNumberToken();
+		long startTime = System.nanoTime();
+		
+		RandomNumberToken rnt = new RandomNumberToken();
 		for (int i = 0; i < 100; i++) {
-			Thread NumberGetterThread = new Thread(rrn);
-			NumberGetterThread.start();
+			Thread numberGetterThread = new Thread(rnt);
+			numberGetterThread.start();
 			try {
-				NumberGetterThread.join();
+				numberGetterThread.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			randomNumbers.add(rrn.getRandomNumber());
+			randomNumbers.add(rnt.getRandomNumber());
 		}
 		
 		Collections.sort(randomNumbers);
 		for(Integer number : randomNumbers) {
 			System.out.println(number);
 		}
+		
+		System.out.println("Elapsed Time = " + (System.nanoTime() - startTime) / 1000_000 + "ms");
 		
 	}
 	
