@@ -2,51 +2,49 @@ package kr.sys4u.server;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.ServerSocket;
 
 public class Server implements Closeable{
+
 	private final int port;
-	
 	private boolean initialized = false;
-	private ServerSocket serverSocket;
-	
+	private ServerExecutor serverExecutor;
+
 	public Server(int port) {
 		this.port = port;
 	}
-	
+
 	private void init() throws IOException {
-		if(initialized) {
+		if (initialized) {
 			return;
 		}
-		serverSocket = new ServerSocket(port);
+		serverExecutor = new ServerExecutor(port);
 		initialized = true;
 	}
-	
+
 	private void execute() throws IOException {
-		if(!initialized) {
+		if (!initialized) {
 			init();
 		}
-		new ServerProcessor(serverSocket).process();
+		serverExecutor.execute();
 	}
 	
+	@Override
 	public void close() {
-		if(!initialized) {
-			return;
-		}
 		try {
-			serverSocket.close();
+			serverExecutor.close();
 		} catch (IOException e) {
-			e.printStackTrace(); //처리필요
+			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		try(Server server = new Server(8888)){
+		try(Server server = new Server(8888)) {
 			server.init();
 			server.execute();
 		} catch (IOException e) {
-			e.printStackTrace(); //처리필요
+			e.printStackTrace();
 		}
 	}
+
 
 } // End of class

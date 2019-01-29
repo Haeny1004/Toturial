@@ -6,9 +6,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientProcessor{
 
+	private final ExecutorService executor = Executors.newFixedThreadPool(2);
 	private final Socket clientSocket;
 	private PrintWriter out;
 	private BufferedReader in;
@@ -28,8 +31,8 @@ public class ClientProcessor{
 		} catch (IOException e) {
 			disConnect();
 		}
-		new Thread(new InputProcessor(in)).start();
-		new Thread(new OutputProcessor(out)).start();
+		executor.execute(new ClientReceiver(in));
+		executor.execute(new ClientScanner(out));
 	}
 	
 	private void disConnect() {
@@ -41,6 +44,7 @@ public class ClientProcessor{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		executor.shutdown();
 	}
 	
 }

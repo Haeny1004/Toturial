@@ -22,6 +22,7 @@ public class Client implements Closeable{
 			return;
 		}
 		clientSocket = new Socket(serverIp, serverPort);
+		initialized = true;
 	}
 	
 	private void execute() throws UnknownHostException, IOException {
@@ -31,11 +32,11 @@ public class Client implements Closeable{
 		new ClientProcessor(clientSocket).process();
 	}
 	
+	@Override
 	public void close() {
 		if(!initialized) {
 			return;
 		}
-		
 	}
 	
 	public static void main(String[] args) {
