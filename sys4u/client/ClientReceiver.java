@@ -18,7 +18,7 @@ public class ClientReceiver implements Runnable{
 				String readMsg = in.readLine();
 				System.out.println(readMsg);
 			} catch (IOException e) {
-				e.printStackTrace();
+				break;
 			}
 		}
 	}

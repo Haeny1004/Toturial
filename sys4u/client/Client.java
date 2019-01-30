@@ -25,11 +25,11 @@ public class Client implements Closeable{
 		initialized = true;
 	}
 	
-	private void execute() throws UnknownHostException, IOException {
+	private void execute(String clientName) throws UnknownHostException, IOException {
 		if(!initialized) {
 			init();
 		}
-		new ClientProcessor(clientSocket).process();
+		new ClientExecutor(clientSocket).execute(clientName);
 	}
 	
 	@Override
@@ -40,9 +40,10 @@ public class Client implements Closeable{
 	}
 	
 	public static void main(String[] args) {
+		String clientName = new ClientLogin().login();
 		try(Client client = new Client("127.0.0.1", 8888)){
 			client.init();
-			client.execute();
+			client.execute(clientName);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

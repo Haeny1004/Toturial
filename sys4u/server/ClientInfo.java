@@ -2,20 +2,20 @@ package kr.sys4u.server;
 
 public class ClientInfo {
 
-	private String roomNumber;
+	private String roomTitle;
 	private String name;
 	
-	public ClientInfo(String roomNumber, String name) {
-		this.roomNumber = roomNumber;
+	public ClientInfo(String roomTitle, String name) {
+		this.roomTitle = roomTitle;
 		this.name = name;
 	}
 
-	public String getRoomNumber() {
-		return roomNumber;
+	public String getRoomTitle() {
+		return roomTitle;
 	}
 
-	public void setRoomNumber(String roomNumber) {
-		this.roomNumber = roomNumber;
+	public void setRoomTitle(String roomNumber) {
+		this.roomTitle = roomNumber;
 	}
 
 	public String getName() {

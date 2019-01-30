@@ -1,14 +1,11 @@
 package kr.sys4u.server.tasker;
 
-import java.util.List;
-
 import kr.sys4u.server.ChatRunner;
 import kr.sys4u.server.ServerSender;
 
 public class TalkTasker implements Tasker{
 
 	private final ChatRunner chatRunner;
-	private List<ChatRunner> chatRunners;
 	private boolean initialized = false;
 	
 	public TalkTasker(ChatRunner chatRunner) {
@@ -19,7 +16,6 @@ public class TalkTasker implements Tasker{
 		if(initialized) {
 			return;
 		}
-		chatRunners = chatRunner.getChatRunners();
 		initialized = true;
 	}
 	
@@ -28,7 +24,7 @@ public class TalkTasker implements Tasker{
 		if(!initialized) {
 			init();
 		}
-		new ServerSender(chatRunners).sendMessageToAll(content);
+		new ServerSender(chatRunner).sendMessageToAll("[" + chatRunner.getClientInfo().getName() + "] " + content);
 	}
 
 }

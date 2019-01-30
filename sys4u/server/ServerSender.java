@@ -4,16 +4,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
 public class ServerSender {
 
-	private final List<ChatRunner> chatRunners;
+	private final ChatRunner chatRunner;
 	private Socket clientSocket;
 	private PrintWriter out;
 
-	public ServerSender(List<ChatRunner> chatRunners) {
-		this.chatRunners = chatRunners;
+	public ServerSender(ChatRunner chatRunner) {
+		this.chatRunner = chatRunner;
 	}
 
 	private void init(ChatRunner chatRunner) {
@@ -26,14 +25,22 @@ public class ServerSender {
 	}
 
 	public void sendMessageToAll(String content) {
-		synchronized (chatRunners) {
-			for (ChatRunner chatRunner : chatRunners) {
+		synchronized (chatRunner.getChatRunners()) {
+			for (ChatRunner chatRunner : chatRunner.getChatRunners()) {
+				if(!this.chatRunner.getClientInfo().getRoomTitle().equalsIgnoreCase(chatRunner.getClientInfo().getRoomTitle())) {
+					continue;
+				}
 				init(chatRunner);
 				sendMessage(content);
 			}
 		}
 	}
-
+	
+	public void sendMessageToMe(String content) {
+		init(chatRunner);
+		sendMessage(content);
+	}
+	
 	private void sendMessage(String content) {
 		out.println(content);
 		out.flush();
