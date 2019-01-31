@@ -3,8 +3,6 @@ package kr.sys4u.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,20 +27,31 @@ public class ChatRunner implements Runnable {
 
 	@Override
 	public void run() {
-		try (PrintWriter out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));) {
-
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));) {
 			while (true) {
-				ServerParser serverParser = new ServerParser();
-				serverParser.parseMsg(in.readLine());
-				String command = serverParser.getCommand();
-				new ServerCommander(this).getTasker(command).task(serverParser.getContent());
+				processingMessage(in);
 			}
-		} catch (IOException e) {
-			disConnect();
-		} catch (IllegalArgumentException e) {
+		} catch (IOException | IllegalArgumentException e) {
 			disConnect();
 		}
+	}
+
+	private void processingMessage(BufferedReader in) throws IOException {
+		ServerParser serverParser = new ServerParser();
+		serverParser.parseMsg(in.readLine());
+		new ServerCommander(this).getTasker(serverParser.getCommand()).task(serverParser.getContent());
+	}
+	
+	private void disConnect() {
+		try {
+			clientSocket.close();
+		} catch (IOException e) {
+			//ignore
+		}
+		chatRunners.remove(this);
+		new ServerSender(this).sendMessageToAll(clientInfo.getName() + "님이 퇴장하셨습니다.");
+		System.out.println("[" + new SimpleDateFormat("hh:mm:ss").format(new Date()) 
+								+ "][현재 접속자 수 : " + chatRunners.size() + "명]");
 	}
 
 	public Socket getClientSocket() {
@@ -59,16 +68,6 @@ public class ChatRunner implements Runnable {
 
 	public Map<String, Room> getChatRooms() {
 		return chatRooms;
-	}
-
-	public void disConnect() {
-		try {
-			clientSocket.close();
-		} catch (IOException e) {
-		}
-		chatRunners.remove(this);
-		new ServerSender(this).sendMessageToAll(clientInfo.getName() + "님이 퇴장하셨습니다.");
-		System.out.println("[" + new SimpleDateFormat("hh:mm:ss").format(new Date()) + "][현재 접속자 수 : " + chatRunners.size() + "명]");
 	}
 
 }

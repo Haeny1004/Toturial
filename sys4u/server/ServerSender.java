@@ -3,6 +3,7 @@ package kr.sys4u.server;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.net.Socket;
 
 public class ServerSender {
@@ -20,7 +21,7 @@ public class ServerSender {
 		try {
 			out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new UncheckedIOException(e);
 		}
 	}
 

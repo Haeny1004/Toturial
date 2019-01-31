@@ -18,11 +18,13 @@ public class RoomQuitTasker implements Tasker {
 		ClientInfo clientInfo = chatRunner.getClientInfo();
 		
 		Room room = chatRunner.getChatRooms().get(clientInfo.getRoomTitle());
-		
-		room.removeClient(clientInfo);
 		synchronized(room) {
-			if(!room.isAttendable()) {
-				room.setAttendable(true);
+			room.removeClient(clientInfo);
+			room.setAttendable(true);
+			if(room.getClients().isEmpty()) {
+				synchronized(chatRunner.getChatRooms()) {
+					chatRunner.getChatRooms().remove(room.getTitle());
+				}
 			}
 		}
 		new ServerSender(chatRunner).sendMessageToAll(clientInfo.getName() + "님이 퇴장하셨습니다.");

@@ -8,7 +8,7 @@ import kr.sys4u.server.ClientInfo;
 public class Room {
 
 	private String title;
-	private String limit;
+	private String limit;	// 타입...
 	private List<ClientInfo> clients;
 	private boolean attendable = true;
 	

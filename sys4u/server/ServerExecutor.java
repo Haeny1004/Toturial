@@ -16,9 +16,10 @@ import kr.sys4u.server.room.Room;
 
 public class ServerExecutor{
 
-	private final List<ChatRunner> chatClients = new ArrayList<>();
+	private final List<ChatRunner> chatRunners = new ArrayList<>();
 	private final Map<String,Room> chatRooms = new HashMap<>();
 	private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
 	private final ServerSocket serverSocket;
 
 	public ServerExecutor(int port) throws IOException {
@@ -26,15 +27,18 @@ public class ServerExecutor{
 	}
 	
 	public void execute() throws IOException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
 		System.out.println("[" + dateFormat.format(new Date()) + "][ Server 대기 상태 ]");
 		while(true) {
 			Socket clientSocket = serverSocket.accept();
-			ChatRunner chatClient = new ChatRunner(clientSocket, chatClients, chatRooms); 
-			chatClients.add(chatClient);
-			executorService.execute(chatClient);
-			System.out.println("[" + dateFormat.format(new Date()) + "][현재 접속자 수 : " + chatClients.size() + "명]");
+			addAndExecuteChatRunner(clientSocket);
+			System.out.println("[" + dateFormat.format(new Date()) + "][현재 접속자 수 : " + chatRunners.size() + "명]");
 		}
+	}
+
+	private void addAndExecuteChatRunner(Socket clientSocket) {
+		ChatRunner chatRunner = new ChatRunner(clientSocket, chatRunners, chatRooms);
+		chatRunners.add(chatRunner);
+		executorService.execute(chatRunner);
 	}
 
 	public void close() throws IOException {

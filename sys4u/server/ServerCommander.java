@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.sys4u.server.tasker.InfoTasker;
-import kr.sys4u.server.tasker.QuitTasker;
+import kr.sys4u.server.tasker.RoomClientListTasker;
 import kr.sys4u.server.tasker.RoomEnterTasker;
+import kr.sys4u.server.tasker.RoomListTasker;
 import kr.sys4u.server.tasker.RoomMakeTasker;
 import kr.sys4u.server.tasker.RoomQuitTasker;
 import kr.sys4u.server.tasker.TalkTasker;
@@ -13,8 +14,8 @@ import kr.sys4u.server.tasker.Tasker;
 
 public class ServerCommander {
 
-	private final ChatRunner chatRunner;
 	private final Map<String, Tasker> taskerMap = new HashMap<>();
+	private final ChatRunner chatRunner;
 	private boolean initialized = false;
 	
 	public ServerCommander(ChatRunner chatRunner) {
@@ -27,11 +28,11 @@ public class ServerCommander {
 		}
 		taskerMap.put("TALK", new TalkTasker(chatRunner));
 		taskerMap.put("INFO", new InfoTasker(chatRunner));
-		taskerMap.put("QUIT", new QuitTasker(chatRunner));
 		taskerMap.put("MKROOM", new RoomMakeTasker(chatRunner));
 		taskerMap.put("ENTERROOM", new RoomEnterTasker(chatRunner));
+		taskerMap.put("CLIENTLIST", new RoomClientListTasker(chatRunner));
 		taskerMap.put("QUITROOM", new RoomQuitTasker(chatRunner));
-		
+		taskerMap.put("ROOMLIST", new RoomListTasker(chatRunner));
 		initialized = true;
 	}
 	
@@ -39,6 +40,6 @@ public class ServerCommander {
 		if(!initialized) {
 			init();
 		}
-		return taskerMap.get(command);
+		return taskerMap.get(command.toUpperCase());
 	}
 }

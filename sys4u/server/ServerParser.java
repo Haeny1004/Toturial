@@ -1,5 +1,6 @@
 package kr.sys4u.server;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class ServerParser {
@@ -17,13 +18,13 @@ public class ServerParser {
 		if(msg == null) {
 			throw new IllegalArgumentException();
 		}
-		StringTokenizer tokenizer = new StringTokenizer(msg, COMMAND_DELIM);
-		if(tokenizer.countTokens() < 2) {
+		try {
+			StringTokenizer tokenizer = new StringTokenizer(msg, COMMAND_DELIM);
 			command = tokenizer.nextToken();
+			content = tokenizer.nextToken();
+		}catch(NoSuchElementException e) {
 			return;
 		}
-		command = tokenizer.nextToken();
-		content = tokenizer.nextToken();
 	}
 
 	public String getCommand() {
