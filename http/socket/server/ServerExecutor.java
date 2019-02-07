@@ -13,7 +13,7 @@ public class ServerExecutor implements Runnable {
 
 	private void execute() {
 		try {
-			new HttpResponseSender(clientSocket, new HttpRequestReader(clientSocket).read()).send();
+			new HttpResponseCommander(clientSocket, new HttpRequestReader(clientSocket).read()).command();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

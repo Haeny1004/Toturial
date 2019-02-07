@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.StringTokenizer;
 
 public class HttpRequestReader {
 
@@ -28,15 +27,12 @@ public class HttpRequestReader {
 		initialized = true;
 	}
 	
-	public StartLine read() throws IOException {
+	public CommandLine read() throws IOException {
 		if(!initialized) {
 			init();
 		}
 		String readLine = in.readLine();
-		StringTokenizer tokenizer = new StringTokenizer(readLine, " ");
-		StartLine startLine = new StartLine(tokenizer.nextToken(), tokenizer.nextToken(), tokenizer.nextToken());
-		System.out.println("Reading Complete!");
-		return startLine;
+		return new CommandLineParser(readLine).parseLine();
 	}
 	
 	
