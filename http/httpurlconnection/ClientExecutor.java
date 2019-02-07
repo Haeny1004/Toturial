@@ -12,26 +12,25 @@ public class ClientExecutor {
 	private BufferedWriter out;
 	private BufferedReader in;
 	private boolean initialized = false;
-	
-	
+
 	public ClientExecutor(HttpURLConnection httpUrlConnection) {
 		httpUrlConn = httpUrlConnection;
 	}
-	
+
 	private void init() {
-		if(initialized) {
+		if (initialized) {
 			return;
 		}
 		try {
-			in = new BufferedReader(new InputStreamReader(httpUrlConn.getInputStream(),"UTF-8"));
+			in = new BufferedReader(new InputStreamReader(httpUrlConn.getInputStream(), "UTF-8"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		initialized = true;
 	}
-	
+
 	public void execute() {
-		if(!initialized) {
+		if (!initialized) {
 			init();
 		}
 		try {
@@ -40,8 +39,6 @@ public class ClientExecutor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	private void sendRequest() throws IOException {
@@ -49,18 +46,15 @@ public class ClientExecutor {
 		out.flush();
 		System.out.println("Request Success!");
 	}
-	
+
 	private void readResponse() throws IOException {
 		String readLine = null;
-		while(true) {
-			if((readLine = in.readLine()) == null) {
+		while (true) {
+			if ((readLine = in.readLine()) == null) {
 				httpUrlConn.disconnect();
 				return;
 			}
 			System.out.println(readLine);
 		}
-		
 	}
-	
-	
 }

@@ -11,7 +11,6 @@ import org.apache.commons.io.IOUtils;
 public class Client implements Closeable{
 
 	private URL url;
-//	private BufferedReader in;
 	private InputStream in;
 	private boolean initialized = false;
 	
@@ -20,13 +19,11 @@ public class Client implements Closeable{
 			return;
 		}
 		try {
-			url = new URL("https://www.naver.com");
+//			url = new URL("https://www.naver.com");
+			url = new URL("https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=da");
+			in = url.openStream();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-		}
-		try {
-//			in = new BufferedReader(new InputStreamReader(url.openStream()));
-			in = url.openStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
