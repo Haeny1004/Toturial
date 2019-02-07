@@ -9,8 +9,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import kr.sys4u.http.socket.server.Responser;
-
 public class HtmlResponser implements Responser {
 
 	private Socket clientSocket;
@@ -40,6 +38,19 @@ public class HtmlResponser implements Responser {
 		if(!initialized) {
 			init(url);
 		}
-		
+		out.println("HTTP/1.1 200");
+		out.println("Content-Type: text/html; charset=UTF-8"); 
+	    out.println("Connection: close");
+	    out.println("");
+	    
+	    String readLine = null;
+	    try {
+			while((readLine = in.readLine()) != null) {
+				out.println(readLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    out.flush();
 	}
 }

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import kr.sys4u.http.socket.server.commandline.CommandLine;
+import kr.sys4u.http.socket.server.commandline.CommandLineParser;
+
 public class HttpRequestReader {
 
 	private final Socket clientSocket;

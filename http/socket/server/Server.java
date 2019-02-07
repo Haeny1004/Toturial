@@ -2,23 +2,18 @@ package kr.sys4u.http.socket.server;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server implements Closeable {
 
 	private final int port = 8888;
-	private final ExecutorService executor = Executors.newFixedThreadPool(20);
-	private ServerSocket serverSocket;
+	private ServerExecutor serverExecutor;
 	private boolean initialized = false;
 
 	private void init() throws IOException {
 		if (initialized) {
 			return;
 		}
-		serverSocket = new ServerSocket(port);
+		serverExecutor = new ServerExecutor(port);
 		initialized = true;
 	}
 
@@ -26,10 +21,11 @@ public class Server implements Closeable {
 		if (!initialized) {
 			init();
 		}
-		while(true) {
-			Socket clientSocket = serverSocket.accept();
-			executor.execute(new ServerExecutor(clientSocket));
-		}
+		serverExecutor.execute();
+//		while(true) {
+//			Socket clientSocket = serverSocket.accept();
+//			executor.execute(new ClientRunner(clientSocket));
+//		}
 	}
 
 	@Override
@@ -37,11 +33,7 @@ public class Server implements Closeable {
 		if (!initialized) {
 			return;
 		}
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		serverExecutor.close();
 	}
 
 	public static void main(String[] args) {
