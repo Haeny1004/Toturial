@@ -22,14 +22,10 @@ public class Server implements Closeable {
 			init();
 		}
 		serverExecutor.execute();
-//		while(true) {
-//			Socket clientSocket = serverSocket.accept();
-//			executor.execute(new ClientRunner(clientSocket));
-//		}
 	}
 
 	@Override
-	public void close(){
+	public void close() {
 		if (!initialized) {
 			return;
 		}
@@ -41,7 +37,7 @@ public class Server implements Closeable {
 			server.init();
 			server.execute();
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		}
 	}
 
